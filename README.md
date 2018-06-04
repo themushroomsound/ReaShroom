@@ -1,2 +1,2 @@
 # ReaShroom
-Useful reaper scripts
+Useful Reaper scripts
