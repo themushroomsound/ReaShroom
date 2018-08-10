@@ -22,4 +22,6 @@ Generates evenly spaced items chosen randomly from a set of selected items on th
 5. Execute this script
 6. When prompted, enter the time you measured
 
-Enjoy
+![repeatrandomizeditems](https://user-images.githubusercontent.com/5003391/43946914-e4ef0c30-9c86-11e8-9202-a846ab055734.gif)
+
+Enjoy!
