@@ -61,7 +61,7 @@ else:
         try:
             period = float(res[4])
         except ValueError:
-            periodErrors.append("- Time between items positions needs to be number (in seconds)")
+            periodErrors.append("- Time between items positions needs to be a number (in seconds)")
         if( period <= 0 ):
             periodErrors.append("- Time between items positions needs to be greater than 0")
         if( len(periodErrors) > 0 ):
