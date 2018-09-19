@@ -31,8 +31,15 @@ else:
     similarPrefixLength = letterIndex - 1
     RPR_ShowConsoleMsg("Removing prefix: " + similarPrefix + " (length: " + str(similarPrefixLength) + ")")
 
+    RPR_PreventUIRefresh(1)
+    RPR_Undo_BeginBlock()
+
     # set selected tracks names
     for trackidx in range(0, nbSelectedTracks):
         curSelectedTrack = RPR_GetSelectedTrack(0, trackidx)
         newTrackName = trackNames[trackidx][similarPrefixLength:]
         RPR_GetSetMediaTrackInfo_String(curSelectedTrack, "P_NAME", newTrackName, True)
+
+    RPR_Undo_EndBlock("Remove common tracks prefixes", -1)
+    RPR_UpdateArrange()
+    RPR_PreventUIRefresh(-1)

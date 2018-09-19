@@ -38,7 +38,14 @@ else:
     timeRangeLength = timeRange[3] - timeRange[2]
     divisionLength = timeRangeLength / denominator
 
+    RPR_PreventUIRefresh(1)
+    RPR_Undo_BeginBlock()
+
     markerPos = timeRange[2]
     while markerPos < timeRange[3]:
         markerPos += divisionLength
         RPR_AddProjectMarker(0, False, markerPos, 0, "", -1)
+
+    RPR_Undo_EndBlock("Divide time selection", -1)
+    RPR_UpdateArrange()
+    RPR_PreventUIRefresh(-1)
