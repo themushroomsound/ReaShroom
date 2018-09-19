@@ -100,8 +100,8 @@ else:
         lastItem = None
         shuffledItems = []
         while cursor <= timeRange[3]:
-            duplicateItem( chooseItem(), cursor)
-            cursor += period + random.uniform(-margin/2, margin/2)
+            duplicateItem( chooseItem(), cursor + random.uniform(-margin/2, margin/2))
+            cursor += period 
 
         for item in items:
             RPR_SetMediaItemSelected(item, True)
