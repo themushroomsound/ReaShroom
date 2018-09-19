@@ -1,5 +1,6 @@
 # ReaShroom
-A collection of Reaper scripts
+A collection of Reaper scripts. 
+These were written in Python 2.7. In order to get them to work, you have to install Python and point Reaper to its location (see Reaper's documentation on the subject: https://www.reaper.fm/sdk/reascript/reascript.php#reascript_req_py).
 
 ## 1. RemoveStemTracksPrefixes
 
