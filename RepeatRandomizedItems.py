@@ -55,28 +55,57 @@ else:
 
     # Get user input (period between items positions)
     period = None
-    while( period is None or period <= 0):
-        res = RPR_GetUserInputs("Time between items positions (in seconds)", 1, "", "", 20)
-        periodErrors = []
+    margin = None
+    cancel = False
+    while( (period is None or period <= 0) and not cancel ):
+        res = RPR_GetUserInputs("Settings", 2, "Repeat time (s),Error margin (s)", "1.0,0", 20)
+
+        # check if cancelled
+        if( res[0] == 0 ):
+            cancel = True
+            RPR_ShowConsoleMsg("Cancelled operation\n")
+
+        periodStr, marginStr = res[4].split(",")
+
+        errors = []
         try:
-            period = float(res[4])
+            period = float(periodStr)
         except ValueError:
-            periodErrors.append("- Time between items positions needs to be a number (in seconds)")
+            errors.append("- Repeat time needs to be a number (in seconds)")
+
         if( period <= 0 ):
-            periodErrors.append("- Time between items positions needs to be greater than 0")
-        if( len(periodErrors) > 0 ):
+            errors.append("- Repeat time needs to be > 0")
+
+        try:
+            margin = float(marginStr)
+        except ValueError:
+            errors.append("- Error margin needs to be a number (in seconds)")
+
+        if( margin < 0 ):
+            errors.append("- Error margin needs to be >= 0")
+
+        if( len(errors) > 0 ):
             msg = ""
-            for error in periodErrors:
+            for error in errors:
                 msg += error + "\n"
             RPR_ShowMessageBox(msg, "Errors", 0)
 
-    # Insert Items
-    cursor = timeRange[2]
-    lastItem = None
-    shuffledItems = []
-    while cursor <= timeRange[3]:
-        duplicateItem( chooseItem(), cursor)
-        cursor += period
+    if( not cancel ):
 
-    for item in items:
-        RPR_SetMediaItemSelected(item, True)
+        RPR_PreventUIRefresh(1)
+        RPR_Undo_BeginBlock()
+
+        # Insert Items
+        cursor = timeRange[2]
+        lastItem = None
+        shuffledItems = []
+        while cursor <= timeRange[3]:
+            duplicateItem( chooseItem(), cursor)
+            cursor += period + random.uniform(-margin/2, margin/2)
+
+        for item in items:
+            RPR_SetMediaItemSelected(item, True)
+
+        RPR_Undo_EndBlock("Repeat randomized items", -1)
+        RPR_UpdateArrange()
+        RPR_PreventUIRefresh(-1)
