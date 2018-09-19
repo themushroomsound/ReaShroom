@@ -24,4 +24,14 @@ Generates evenly spaced items chosen randomly from a set of selected items on th
 
 ![repeatrandomizeditems](https://user-images.githubusercontent.com/5003391/43946914-e4ef0c30-9c86-11e8-9202-a846ab055734.gif)
 
+## 3. DivideTimeSelection
+
+Divides a time selection in equal sections, placing a marker at the start of each section.
+
+*How to use it*
+
+1. Select a time range
+2. Execute this script
+3. When prompted, enter the number of sections into which you would like to divide your time selection
+
 Enjoy!
