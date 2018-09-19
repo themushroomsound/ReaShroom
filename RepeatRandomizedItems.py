@@ -67,6 +67,7 @@ else:
 
         periodStr, marginStr = res[4].split(",")
 
+        # check for errors
         errors = []
         try:
             period = float(periodStr)
@@ -101,7 +102,7 @@ else:
         shuffledItems = []
         while cursor <= timeRange[3]:
             duplicateItem( chooseItem(), cursor + random.uniform(-margin/2, margin/2))
-            cursor += period 
+            cursor += period
 
         for item in items:
             RPR_SetMediaItemSelected(item, True)
