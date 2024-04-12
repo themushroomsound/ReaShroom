@@ -17,6 +17,9 @@ reaper.ClearConsole()
 
 for i = 0, numTotal - 1 do
 	local _, isRegion, regionStart, regionEnd, regionName, regionIdx, regionColor = reaper.EnumProjectMarkers3(0, i)
+	if regionName == "" then
+		regionName = "Unnamed Region"
+	end
 	if isRegion then
 		table.insert(regions, {name = regionName, start = regionStart, endd = regionEnd, color = regionColor})
 	end
@@ -50,18 +53,20 @@ for _, region in ipairs(regions) do
 		reaper.GetSetMediaTrackInfo_String(newTrack, "P_NAME", region.name, true)
 
 		trackCpt = trackCpt + 1
-		itemCpt = 0		
+		itemCpt = 0          
 	end
 		
 	-- Create item for each region
 	local newItem = reaper.AddMediaItemToTrack(newTrack)
+	local newTake = reaper.AddTakeToMediaItem(newItem)
+	reaper.GetSetMediaItemTakeInfo_String(newTake, "P_NAME", region.name, true)
 	reaper.SetMediaItemPosition(newItem, region.start, false)
 	reaper.SetMediaItemLength(newItem, region.endd - region.start, false)
-	reaper.GetSetMediaItemInfo_String(newItem, "P_NOTES", region.name, true)
 	reaper.SetMediaItemInfo_Value(newItem, "I_CUSTOMCOLOR", region.color)
+	reaper.SetMediaItemInfo_Value(newItem, "I_CURTAKE", 0)
 	
 	itemCpt = itemCpt + 1
-end	
+end     
 
 reaper.Undo_EndBlock("Regions to items", -1)
 reaper.UpdateArrange()
