@@ -45,7 +45,7 @@ Another version of that same script allows creating all items on the same track 
 
 Creates regions for all selected items (keeping their names and colors), typically to restore previously saved regions using the previous script.
 
-## 6. Set All Item Lengths As First In Selection
+## 6. Set All Item Lengths As First In Selection (lua)
 
 When multiple items are selected, matches all item lengths to the first selected item's length.
 
