@@ -31,7 +31,7 @@ for i = 0, numSelectedItems - 1 do
 	local itemStart = reaper.GetMediaItemInfo_Value(selectedItem, "D_POSITION")
 	local itemLength = reaper.GetMediaItemInfo_Value(selectedItem, "D_LENGTH")
 	
-	-- Print the name to the console
+	-- Create the region
 	reaper.AddProjectMarker2(0, true, itemStart, itemStart + itemLength, regionName, -1, itemColor)
 end
 
