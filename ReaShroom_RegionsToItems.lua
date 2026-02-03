@@ -1,34 +1,25 @@
--- Create a table to store the region information
-local regions = {}
+-- Bootstrap
+local sep = package.config:sub(1, 1)
+local script_path = ({reaper.get_action_context()})[2]:match("(.*" .. sep .. ")")
+package.path = script_path .. "Lib" .. sep .. "?.lua;" .. package.path
 
--- Get the total number of regions
-local numTotal,numMarkers,numRegions = reaper.CountProjectMarkers(0)
+-- Dependency
+package.loaded["ReaShroom_RegionsToItems_Module"] = nil -- to remove
+local RtI = require("ReaShroom_RegionsToItems_Module")
+RtI.msg("Loaded RegionsToItems LUA module")
 
-reaper.ShowConsoleMsg("Total markers & regions: " .. numTotal .. "\n", "Info", 0)
-reaper.ShowConsoleMsg("Total regions: " .. numRegions .. "\n", "Info", 0)
-reaper.ShowConsoleMsg("Total markers: " .. numMarkers .. "\n", "Info", 0)
+-- Get the number of regions, abort if none
+local numRegions = RtI.GetNbRegions()
 
 if numRegions == 0 then
     reaper.ShowMessageBox("No regions found in the project.", "Info", 0)
-	return
+    return
 end
 
 reaper.ClearConsole()
 
-for i = 0, numTotal - 1 do
-	local _, isRegion, regionStart, regionEnd, regionName, regionIdx, regionColor = reaper.EnumProjectMarkers3(0, i)
-	if regionName == "" then
-		regionName = "Unnamed Region"
-	end
-	if isRegion then
-		table.insert(regions, {name = regionName, start = regionStart, endd = regionEnd, color = regionColor})
-	end
-end
-
--- Sort the regions by name and start time
-table.sort(regions, function(a, b)
-	return a.name < b.name or (a.name == b.name and a.start < b.start)
-end)
+-- Create a table to store the region information
+local regions = RtI.GetRegionsData()
 
 reaper.PreventUIRefresh(1)
 reaper.Undo_BeginBlock()
@@ -41,32 +32,26 @@ local newTrack, newItem
 
 for _, region in ipairs(regions) do
 
-	-- Create track for each distinct region name
-	if region.name ~= prevRegionName then
-		prevRegionName = region.name
-		
-		-- Create a new track
-		reaper.InsertTrackAtIndex(trackCpt, false)
-		newTrack = reaper.GetTrack(0, trackCpt)
-		
-		-- Name the new track
-		reaper.GetSetMediaTrackInfo_String(newTrack, "P_NAME", region.name, true)
+    -- Create track for each distinct region name
+    if region.name ~= prevRegionName then
+        prevRegionName = region.name
 
-		trackCpt = trackCpt + 1
-		itemCpt = 0          
-	end
-		
-	-- Create item for each region
-	local newItem = reaper.AddMediaItemToTrack(newTrack)
-	local newTake = reaper.AddTakeToMediaItem(newItem)
-	reaper.GetSetMediaItemTakeInfo_String(newTake, "P_NAME", region.name, true)
-	reaper.SetMediaItemPosition(newItem, region.start, false)
-	reaper.SetMediaItemLength(newItem, region.endd - region.start, false)
-	reaper.SetMediaItemInfo_Value(newItem, "I_CUSTOMCOLOR", region.color)
-	reaper.SetMediaItemInfo_Value(newItem, "I_CURTAKE", 0)
-	
-	itemCpt = itemCpt + 1
-end     
+        -- Create a new track
+        reaper.InsertTrackAtIndex(trackCpt, false)
+        newTrack = reaper.GetTrack(0, trackCpt)
+
+        -- Name the new track
+        reaper.GetSetMediaTrackInfo_String(newTrack, "P_NAME", region.name, true)
+
+        trackCpt = trackCpt + 1
+        itemCpt = 0
+    end
+
+    -- Create item for each region
+	RtI.CreateRegionItem(newTrack, region)
+
+    itemCpt = itemCpt + 1
+end
 
 reaper.Undo_EndBlock("Regions to items", -1)
 reaper.UpdateArrange()
