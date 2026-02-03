@@ -37,13 +37,13 @@ Divides a time selection in equal sections, placing a marker at the start of eac
 
 ## 4. Regions to Items (lua)
 
-Creates items for all regions in the project (keeping their names and colors), as a form of backup if too many regions make the project hard to read. The script creates tracks for all distinct region names, and regions of the same name are then grouped as items on the same track. Be careful when deleting regions afterwards, the region render matrix information is not saved to the newly created items.
+Creates items for all regions in the project (keeping their names and colors), as a form of backup if too many regions make the project hard to read. The script creates tracks for all distinct region names, and regions of the same name are then grouped as items on the same track. Be careful when deleting regions afterwards, only basic region render matrix information is saved to the newly created items (not "force mono" and such).
 
 Another version of that same script allows creating all items on the same track if needed.
 
 ## 5. Items to Regions (lua)
 
-Creates regions for all selected items (keeping their names and colors), typically to restore previously saved regions using the previous script.
+Creates regions for all selected items (keeping their names, colors and potential region render matrix data), typically to restore previously saved regions using the previous script.
 
 ## 6. SetAllItemLengthsAsFirstInSelection (lua)
 
