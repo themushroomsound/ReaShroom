@@ -49,4 +49,14 @@ Creates regions for all selected items (keeping their names, colors and potentia
 
 When multiple items are selected, matches all item lengths to the first selected item's length.
 
+## 7. RandomizeSelectedItemsPitch (lua)
+
+Randomizes the playback rate of the active take on each selected item around that take's current playrate using a user-defined cents range. Preserve pitch is disabled on the processed takes so the result is a real pitch and speed change.
+
+*How to use it*
+
+1. Select one or more items
+2. Execute this script
+3. When prompted, enter the minimum and maximum cents to use for the randomization range
+
 Enjoy!
